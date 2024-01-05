@@ -6,6 +6,9 @@
   .page-content {
     padding: 100px 300px;
   }
+  .message-created-at {
+    color: #aaa;
+  }
 </style>
 
 <!-- Always shows a header, even in smaller screens. -->
@@ -37,17 +40,21 @@
   <main class="mdl-layout__content">
     <div class="page-content">
       <!-- Your content goes here -->
+      {% for message in messages %}
+      <div><span class="message-created-at">[{{message.created_at}}]</span> {{message.author.first_name}}: <i>{{message.text}}</i></div>
+      {% endfor %}
+      
       <form action="/chat/" method="post">
         {% csrf_token %}
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
           <input name="textMessage" class="mdl-textfield__input" type="text" id="sample3">
           <label class="mdl-textfield__label" for="sample3">Text...</label>
         </div>
+
         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
           Send
         </button>
       </form>
-      
     </div>
   </main>
 </div>
