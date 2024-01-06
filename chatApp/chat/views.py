@@ -16,13 +16,11 @@ def index(request):
 def login_view(request):
   redirect = request.GET.get('next')
   if request.method == 'POST':
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(username=username, password=password)
+    user = authenticate(username=request.POST.get('username'), password=request.POST.get('password'))
     if user:
       login(request, user)
       # Wenn die URL so aussieht: http://example.com/some-path/?next=/redirect-here/, dann würde request.GET.get('next') den Wert '/redirect-here/' zurückgeben.
-      return HttpResponseRedirect(request.POST.get(redirect))
+      return HttpResponseRedirect(request.POST.get('redirect'))
     else:
       return render(request, 'auth/login.html', {'wrongPassword': True, 'redirect': redirect})
   return render(request, 'auth/login.html', {'redirect': redirect})
