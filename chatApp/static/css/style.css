@@ -5,3 +5,7 @@
 .message-created-at {
     color: #aaa;
 }
+
+.error-message {
+    color: red;
+}
