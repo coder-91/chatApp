@@ -88,5 +88,5 @@ def register(request):
         
         if authenticated_user:
           login(request, authenticated_user)
-          return HttpResponseRedirect(request.POST.get('/chat/'))
+          return HttpResponseRedirect('/chat/')
   return render(request, 'auth/register.html', {'form_data': form_data, 'error_messages': error_messages})
