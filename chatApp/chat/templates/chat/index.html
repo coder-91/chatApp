@@ -1,15 +1,43 @@
 {% extends "base.html" %}
 {% block content %}
 {% if request.user.is_authenticated %}
-    {% for message in messages %}
-    <div><span class="message-created-at">[{{message.created_at}}]</span> {{message.author.first_name}}: <i>{{message.text}}</i></div>
-    {% endfor %}
-          
-    <form action="/chat/" method="post">
+    <div id="messageContainer">
+      {% for message in messages %}
+      <div><span class="message-created-at">[{{message.created_at}}]</span> {{message.author.first_name}}: <i>{{message.text}}</i></div>
+      {% endfor %}
+    </div>
+    
+       
+    <script>
+      async function sendMessage(){
+        let fd = new FormData()
+        let token = '{{ csrf_token }}'
+        fd.append('textMessage', messageField.value)
+        fd.append('csrfmiddlewaretoken', token)
+        try{
+          messageContainer.innerHTML += `<div id="deleteMessage"><span class="color-gray">[DATUM]</span> {{ request.user.first_name }}: <i class="color-gray">${messageField.value}</i></div>` 
+          let response = await fetch('/chat/', {
+            method: 'POST',
+            body: fd
+          });
+          let json = await response.json();
+          console.log(json);
+          document.getElementById('deleteMessage').remove();
+          messageContainer.innerHTML += `<div><span class="color-gray">[DATUM]</span> {{ request.user.first_name }}: <i>${messageField.value}</i></div>` 
+          console.log('Success!')
+        } catch(e) {
+          console.log('An error occured!', e)
+        }
+        
+      }
+    </script>
+
+
+    <form onsubmit="sendMessage(); return false" method="post">
       {% csrf_token %}
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input name="textMessage" class="mdl-textfield__input" type="text" id="sample3">
-        <label class="mdl-textfield__label" for="sample3">Text...</label>
+        <input name="messageField" class="mdl-textfield__input" type="text" id="messageField">
+        <label class="mdl-textfield__label" for="messageField">Text...</label>
       </div>
 
       <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">

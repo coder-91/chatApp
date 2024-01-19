@@ -1,18 +1,31 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from .models import Chat, Message
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
+from django.core import serializers
+
 
 @login_required(login_url='/login/') #redirect when user is not logged in
 def index(request):
+  """_summary_
+
+  Args:
+      request (_type_): _description_
+
+  Returns:
+      _type_: _description_
+  """
   if request.method == 'POST':
     print("Received data " + request.POST["textMessage"])
     myChat = Chat.objects.get(id=1)
-    Message.objects.create(text=request.POST["textMessage"], chat=myChat, author=request.user, receiver=request.user)
+    new_message = Message.objects.create(text=request.POST["textMessage"], chat=myChat, author=request.user, receiver=request.user)
+    serialized_obj = serializers.serialize('json', [ new_message, ])
+    return JsonResponse(serialized_obj[1:-1], safe=False)
   chatMessages = Message.objects.filter(chat__id=1)
+  
   return render(request, 'chat/index.html', {'messages': chatMessages})
 
 def login_view(request):
