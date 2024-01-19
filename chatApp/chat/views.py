@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
 from django.core import serializers
-
+from .utils import *
 
 @login_required(login_url='/login/') #redirect when user is not logged in
 def index(request):
