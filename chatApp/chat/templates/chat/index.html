@@ -1,37 +1,107 @@
 {% extends "base.html" %}
 {% block content %}
 {% if request.user.is_authenticated %}
-    <div id="messageContainer">
-      {% for message in messages %}
-      <div><span class="message-created-at">[{{message.created_at}}]</span> {{message.author.first_name}}: <i>{{message.text}}</i></div>
-      {% endfor %}
-    </div>
+      <div id="chatContainer">
+        {% for message in messages %}
+        <div class="messageContainer">
+          <div class="message">
+            <div class="author">{{message.author.first_name}}: </div>
+            <div class="message-content">
+              {{message.text}}
+            </div>
+            <div class="message-meta">
+              <span class="tab">[{{message.created_at|date:"D, d M Y"}}]:</span>
+              <span>{{message.created_at|time:"H:i"}}</span>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
     
+    <style>
+      .page-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 0;
+      }
+
+      .messageContainer {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 10px;
+        font-color: white;
+        min-width: 400px;
+      }
+      
+      .message {
+        background-color: rgb(63,81,181);
+        color: white;
+        width:100%;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      }
+
+      .author {
+        font-weight: bold;
+      }
+      
+      .message-content {
+        margin-bottom: 5px;
+      }
+      
+      .message-meta {
+        font-size: 0.8em;
+        display: flex;
+        justify-content: flex-end;
+      }
+      
+      .tab {
+        margin-right: 5px;
+      }
+    </style>
        
     <script>
       async function sendMessage(){
-        let fd = new FormData()
-        let token = '{{ csrf_token }}'
-        fd.append('textMessage', messageField.value)
-        fd.append('csrfmiddlewaretoken', token)
-        try{
-          messageContainer.innerHTML += `<div id="deleteMessage"><span class="color-gray">[DATUM]</span> {{ request.user.first_name }}: <i class="color-gray">${messageField.value}</i></div>` 
+        let messageField = document.getElementById('messageField');
+        let chatContainer = document.getElementById('chatContainer');
+        
+        let fd = new FormData();
+        let token = '{{ csrf_token }}';
+        fd.append('messageField', messageField.value);
+        fd.append('csrfmiddlewaretoken', token);
+    
+        try {
           let response = await fetch('/chat/', {
             method: 'POST',
             body: fd
           });
           let json = await response.json();
           console.log(json);
-          document.getElementById('deleteMessage').remove();
-          messageContainer.innerHTML += `<div><span class="color-gray">[DATUM]</span> {{ request.user.first_name }}: <i>${messageField.value}</i></div>` 
-          console.log('Success!')
+      
+          // Erstelle ein neues Nachrichtenelement
+          chatContainer.innerHTML +=`
+          <div class="messageContainer">
+            <div class="message">
+              <div class="author">{{ request.user.first_name }}: </div>
+              <div class="message-content">
+                ${json.fields.text}
+              </div>
+              <div class="message-meta">
+                <span class="tab">[{{json.created_at|date:"D, d M Y" }}]:</span>
+                <span>{{json.created_at|time:"H:i" }}</span>
+              </div>
+            </div>
+          </div>
+          `
+          messageField.value = '';
+          console.log('Success!');
         } catch(e) {
-          console.log('An error occured!', e)
+          console.log('An error occurred!', e);
         }
-        
       }
     </script>
-
 
     <form onsubmit="sendMessage(); return false" method="post">
       {% csrf_token %}

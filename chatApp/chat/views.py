@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from .models import Chat, Message
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
@@ -19,13 +19,12 @@ def index(request):
       _type_: _description_
   """
   if request.method == 'POST':
-    print("Received data " + request.POST["textMessage"])
+    print("Received data " + request.POST["messageField"])
     myChat = Chat.objects.get(id=1)
-    new_message = Message.objects.create(text=request.POST["textMessage"], chat=myChat, author=request.user, receiver=request.user)
+    new_message = Message.objects.create(text=request.POST["messageField"], chat=myChat, author=request.user, receiver=request.user)
     serialized_obj = serializers.serialize('json', [ new_message, ])
     return JsonResponse(serialized_obj[1:-1], safe=False)
   chatMessages = Message.objects.filter(chat__id=1)
-  
   return render(request, 'chat/index.html', {'messages': chatMessages})
 
 def login_view(request):
@@ -39,6 +38,10 @@ def login_view(request):
     else:
       return render(request, 'auth/login.html', {'wrongPassword': True, 'redirect': redirect})
   return render(request, 'auth/login.html', {'redirect': redirect})
+
+def logout_view(request):
+  logout(request)
+  return HttpResponseRedirect('/login/')
 
 def register(request):
   form_data = {}
