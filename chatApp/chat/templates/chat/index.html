@@ -78,7 +78,9 @@
             body: fd
           });
           let json = await response.json();
-          console.log(json);
+          const jsonObject = JSON.parse(json);
+          dateCreated = formatDate(jsonObject.fields.created_at);
+          timeCreated = formatTime(jsonObject.fields.created_at);
       
           // Erstelle ein neues Nachrichtenelement
           chatContainer.innerHTML +=`
@@ -86,11 +88,11 @@
             <div class="message">
               <div class="author">{{ request.user.first_name }}: </div>
               <div class="message-content">
-                ${json.fields.text}
+                ${jsonObject.fields.text}
               </div>
               <div class="message-meta">
-                <span class="tab">[{{json.created_at|date:"D, d M Y" }}]:</span>
-                <span>{{json.created_at|time:"H:i" }}</span>
+                <span class="tab">[${dateCreated}]:</span>
+                <span>${timeCreated}</span>
               </div>
             </div>
           </div>
@@ -100,6 +102,18 @@
         } catch(e) {
           console.log('An error occurred!', e);
         }
+      }
+
+      function formatDate(dateTime) {
+        const createdAt = new Date(dateTime);
+        const dateFormatted = `${createdAt.getDate().toString().padStart(2, '0')}.${(createdAt.getMonth() + 1).toString().padStart(2, '0')}.${createdAt.getFullYear().toString().slice(-2)}`;
+        return dateFormatted;
+      }
+
+      function formatTime(dateTime) {
+        const createdAt = new Date(dateTime);
+        const timeFormatted = `${createdAt.getHours().toString().padStart(2, '0')}:${createdAt.getMinutes().toString().padStart(2, '0')}`;
+        return timeFormatted;
       }
     </script>
 

@@ -20,7 +20,7 @@ def index(request):
   """
   if request.method == 'POST':
     print("Received data " + request.POST["messageField"])
-    myChat = Chat.objects.get(id=1)
+    myChat, created = Chat.objects.get_or_create(id=1)
     new_message = Message.objects.create(text=request.POST["messageField"], chat=myChat, author=request.user, receiver=request.user)
     serialized_obj = serializers.serialize('json', [ new_message, ])
     return JsonResponse(serialized_obj[1:-1], safe=False)
