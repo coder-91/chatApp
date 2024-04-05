@@ -1,65 +1,63 @@
 {% extends "base.html" %}
 {% block content %}
-
-<form method="POST" action="/register/">
-  {% csrf_token %}
-  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-    <input class="mdl-textfield__input" type="text" id="firstName" name="firstName" value="{{ form_data.firstName }}">
-    <label class="mdl-textfield__label" for="firstName">First name</label>
-  </div>
-  {% if error_messages.firstName %}
-  <div class="error-message">{{ error_messages.firstName }}</div>
-  {% endif %}
-
-   
-  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-    <input class="mdl-textfield__input" type="text" id="lastName" name="lastName" value="{{ form_data.lastName }}">
-    <label class="mdl-textfield__label" for="lastName">Last name</label>
-  </div>
-  {% if error_messages.lastName %}
-  <div class="error-message">{{ error_messages.lastName }}</div>
-  {% endif %}
-
-  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-    <input class="mdl-textfield__input" type="text" id="username" name="username" value="{{ form_data.username }}">
-    <label class="mdl-textfield__label" for="username">Username</label>
-  </div>
-  {% if error_messages.username %}
-  <div class="error-message">{{ error_messages.username }}</div>
-  {% endif %}
-
-  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-    <input class="mdl-textfield__input" type="email" id="email" name="email" value="{{ form_data.email }}">
-    <label class="mdl-textfield__label" for="email">E-Mail</label>
-  </div>
-  {% if error_messages.email_invalid %}
-  <div class="error-message">{{ error_messages.email_invalid }}</div>
-  {% endif %}
-  {% if error_messages.email_exists %}
-  <div class="error-message">{{ error_messages.email_exists }}</div>
-  {% endif %}
-
-  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-    <input class="mdl-textfield__input" type="password" id="password" name="password">
-    <label class="mdl-textfield__label" for="password">Password</label>
-  </div>
-
-  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-    <input class="mdl-textfield__input" type="password" id="confirmPassword" name="confirmPassword">
-    <label class="mdl-textfield__label" for="confirmPassword">Confirm Password</label>
-  </div>
-  {% if error_messages.confirmPassword %}
-  <div class="error-message">{{ error_messages.confirmPassword }}</div>
-  {% endif %}
-
-  <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
-    Register
-  </button>
-</form>
-<div>Have an account? <a href="/login/">Log in</a></div>
-
-{% if error_message %}
-  <div class="error-message">{{ error_message }}</div>
-{% endif %}
-
+<div class="container">
+  <h2>Registration</h2>
+  <form method="post" action="/register/">
+      {% csrf_token %}
+      <div class="form-group">
+          <label for="id_first_name">First name:</label>
+          {{ form.first_name }}
+      </div>
+      <div class="form-group">
+          <label for="id_last_name">Last name:</label>
+          {{ form.last_name }}
+      </div>
+      <div class="form-group">
+          <label for="id_username">Username:</label>
+          <input type="text" id="id_username" name="username" {% if form.username.field.required %} required {% endif %}>
+          {% if form.username.errors %}
+              <div class="error-message">
+                  {% for error in form.username.errors %}
+                      {{ error }}
+                  {% endfor %}
+              </div>
+          {% endif %}
+      </div>
+      <div class="form-group">
+          <label for="id_email">E-Mail:</label>
+          {{ form.email }}
+          {% if form.email.errors %}
+              <div class="error-message">
+                  {% for error in form.email.errors %}
+                      {{ error }}
+                  {% endfor %}
+              </div>
+          {% endif %}
+      </div>
+      <div class="form-group">
+          <label for="id_password">Password:</label>
+          <input type="password" id="id_password" name="password" {% if form.password.field.required %} required {% endif %}>
+          {% if form.password.errors %}
+              <div class="error-message">
+                  {% for error in form.password.errors %}
+                      {{ error }}
+                  {% endfor %}
+              </div>
+          {% endif %}
+      </div>
+      <div class="form-group">
+          <label for="id_confirm_password">Confirm Password:</label>
+          {{ form.confirm_password }}
+          {% if form.confirm_password.errors %}
+              <div class="error-message">
+                  {% for error in form.confirm_password.errors %}
+                      {{ error }}
+                  {% endfor %}
+              </div>
+          {% endif %}
+      </div>
+      <button type="submit" class="btn">Register</button>
+  </form>
+  <div class="account"><span>Have an account?</span><span><a href="/login/"> Log in</a></span></div>
+</div>
 {% endblock %}

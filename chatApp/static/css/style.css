@@ -1,0 +1,68 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+.container {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.form-group .error-message {
+    color: red;
+    font-size: 14px;
+}
+
+.form-group.error-field input {
+    border-color: red;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    text-align: center;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: rgb(63, 81, 181);
+    color: #fff;
+}
+
+.account {
+    display: flex;
+    justify-content: center;
+    column-gap: 5px;
+    margin: 10px 0
+}

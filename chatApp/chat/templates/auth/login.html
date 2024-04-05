@@ -1,26 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Login</h1>
-
-{% if wrongPassword %}
-<p>Username or password is wrong!</p>
-{% endif %}
-
-<form method="POST" action="/login/">
-  {% csrf_token %}
-  <input type="hidden" name="redirect" value="{{ redirect }}">
-  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-    <input class="mdl-textfield__input" type="text" id="username" name="username">
-    <label class="mdl-textfield__label" for="username">Username</label>
-  </div>
-  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-    <input class="mdl-textfield__input" type="password" id="password" name="password">
-    <label class="mdl-textfield__label" for="password">Password</label>
-  </div>
-
-  <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
-    Login
-  </button>
-</form>
-<div>No account? <a href="/register/">Sign up</a></div>
+<div class="container">
+  <h2>Login</h2>
+  <form method="post" action="/login/">
+      {% csrf_token %}
+      <input type="hidden" name="redirect" value="{{ redirect }}">
+      <div class="form-group">
+          <label for="id_username">Username:</label>
+          <input class="mdl-textfield__input" type="text" id="username" name="username">
+      </div>
+      <div class="form-group">
+        <label for="id_password">Password:</label>
+        <input class="mdl-textfield__input" type="password" id="id_password" name="password">
+      </div>
+      <button type="submit" class="btn">Login</button>
+  </form>
+  <div class="account"><span>No account?</span><span><a href="{% url 'register' %}"> Sign up</a></span></div>
+</div>
 {% endblock %}
