@@ -5,7 +5,7 @@
         {% for message in messages %}
         <div class="messageContainer">
           <div class="message">
-            <div class="author">{{message.author.first_name}}: </div>
+            <div class="author">{{message.author.username}}: </div>
             <div class="message-content">
               {{message.text}}
             </div>
@@ -86,7 +86,7 @@
           chatContainer.innerHTML +=`
           <div class="messageContainer">
             <div class="message">
-              <div class="author">{{ request.user.first_name }}: </div>
+              <div class="author">{{ request.user.username }}: </div>
               <div class="message-content">
                 ${jsonObject.fields.text}
               </div>
